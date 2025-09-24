@@ -1,92 +1,102 @@
 class LabourApp:
 
-    def __init__(s):
-
+    def __init__(self):
         # initialize labour first
-
-        s.labours=[]
+        self.labours = []
 
     # adding method > new labour
-
-    def add(s,n,a,sk,w):
-
-        s.labours.append({"name":n,"age":a, "skill":sk, "wage":w, "days":0})
+    def add(self, name, age, skill, wage):
+        self.labours.append({
+            "name": name,
+            "age": age, 
+            "skill": skill, 
+            "wage": wage, 
+            "days": 0
+        })
+        print(f"✅ Added {name} successfully!")
 
     # work method > record one day of work
-
-    def work(s,n):
-
-        for l in s.labours:
-
-            if l['name']==n:
-                
-                l["days"]+=1
-
-                print(f"{n} worked a day. Total days: {l['days']}")
+    def work(self, name):
+        for labour in self.labours:
+            if labour['name'] == name:
+                labour["days"] += 1
+                print(f"💪 {name} worked a day. Total days: {labour['days']}")
+                return
+        print(f"❌ Worker '{name}' not found!")
 
     # salary method > calculate salary
-
-    def salary(s,n):
-
-        for l in s.labours:
-
-            if l['name']==n:
-
-                pay=l["wage"]*l["days"]
-
-                print(f"{n}'s Salary = ${pay}")
-
+    def salary(self, name):
+        for labour in self.labours:
+            if labour['name'] == name:
+                pay = labour["wage"] * labour["days"]
+                print(f"💰 {name}'s Salary = ${pay}")
+                return
+        print(f"❌ Worker '{name}' not found!")
     
-    #view method > show all labours
-
-    def view(s):
-
-        for i, l in enumerate(s.labours.l):
-
-            print(f"{i}. {l['name']} - {l['age']}yrs - {l['wage']}/day - Days:{l['days']}")
-
+    # view method > show all labours
+    def view(self):
+        if not self.labours:  # Check if list is empty
+            print("📭 No workers added yet!")
+            return
+            
+        print("\n👥 All Workers:")
+        print("-" * 50)
+        for i, labour in enumerate(self.labours):  # 🔧 FIXED: removed .l
+            print(f"{i+1}. {labour['name']} - {labour['age']}yrs - ${labour['wage']}/day - Days worked: {labour['days']} - Skill: {labour['skill']}")
 
     # remove method > delete labour by name
+    def remove(self, name):
+        original_count = len(self.labours)
+        self.labours = [labour for labour in self.labours if labour['name'] != name]
+        
+        if len(self.labours) < original_count:
+            print(f"🗑️ Removed {name} successfully!")
+        else:
+            print(f"❌ Worker '{name}' not found!")
 
-
-    def remove(s,n):
-
-        s.labours=[l for l in s.labours if l['name']!=n]
-
-app=LabourApp()
+# Main program
+app = LabourApp()
 
 while True:
-
-    print("\n1. Add Labour \n2.View Labours \n3.Record Work \n4. Calculate Salary \n5.Remove Labour \n6.Exit")
+    print("\n" + "="*40)
+    print("🏗️  LABOUR MANAGEMENT SYSTEM  🏗️")
+    print("="*40)
+    print("1. 👤 Add Labour")
+    print("2. 👥 View All Labours") 
+    print("3. 💪 Record Work Day")
+    print("4. 💰 Calculate Salary")
+    print("5. 🗑️  Remove Labour")
+    print("6. 🚪 Exit")
+    print("="*40)
     
-    ch=input("Choose:")
+    choice = input("Choose (1-6): ").strip()
 
-    if ch=="1":
-        
-        app.add(input("Name:"),int(input("Age:")),input("skill:"),int(input("wage/day:")))
+    if choice == "1":
+        print("\n➕ Adding New Worker...")
+        name = input("Name: ").strip()
+        age = int(input("Age: "))
+        skill = input("Skill: ").strip()
+        wage = int(input("Wage per day ($): "))
+        app.add(name, age, skill, wage)
 
-    elif ch=="2":
-
+    elif choice == "2":
         app.view()
 
-    elif ch=="3":
+    elif choice == "3":
+        name = input("\n👤 Worker name: ").strip()
+        app.work(name)
 
-        app.work(input("Name:"))
+    elif choice == "4":
+        name = input("\n💰 Worker name: ").strip()
+        app.salary(name)
 
-    elif ch=="4":
+    elif choice == "5":
+        name = input("\n🗑️ Worker name to remove: ").strip()
+        app.remove(name)
 
-        app.salary(input("Name:"))
-
-    elif ch=="5":
-
-        app.remove(input("Name:"))
-
-    elif ch=="6":
-        
+    elif choice == "6":
+        print("\n👋 Goodbye! Thanks for using Labour Management System!")
         break
 
     else:
-
-        print("Invalid")
-        
-    #program ends
+        print("❌ Invalid choice! Please enter 1-6.")
